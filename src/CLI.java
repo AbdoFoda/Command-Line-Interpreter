@@ -6,8 +6,9 @@ public class CLI {
 	protected static String workingDirectory = new String();
 
 	public static void init() {
-		workingDirectory = "/home";
+		workingDirectory = "/home/reem/Documents";///home";
 		cmd.put("pwd", new Pwd());
+		cmd.put("ls", new Ls());
 	}
 
 	public static ArrayList<String> parser(String input) {
@@ -19,7 +20,6 @@ public class CLI {
 												// executed
 			commandLine = Arrays
 					.copyOfRange(commandLine, 1, commandLine.length);
-
 			if (cmd.containsKey(command)) {
 				ret.addAll(cmd.get(command).execute(
 						new ArrayList<String>(Arrays.asList(commandLine))));

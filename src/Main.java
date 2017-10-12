@@ -14,9 +14,10 @@ public class Main {
 				break;
 			ArrayList<String> output = CLI.parser(input);
 			for (String e : output) {
-				if (e.length() > 0) {
+				if (e.length() > 0 ) {
 					System.out.println(e);
 				}
+
 			}
 		}
 		scanner.close();
