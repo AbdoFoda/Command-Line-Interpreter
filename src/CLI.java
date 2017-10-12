@@ -9,6 +9,7 @@ public class CLI {
 		workingDirectory = "/home";
 		cmd.put("pwd", new Pwd());
 		cmd.put("ls", new Ls());
+		cmd.put("cd", new Cd());
 	}
 
 	public static ArrayList<String> parser(String input) {
