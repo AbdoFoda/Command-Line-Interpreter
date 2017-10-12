@@ -6,7 +6,7 @@ public class CLI {
 	protected static String workingDirectory = new String();
 
 	public static void init() {
-		workingDirectory = "/home/reem/Documents";///home";
+		workingDirectory = "/home";
 		cmd.put("pwd", new Pwd());
 		cmd.put("ls", new Ls());
 	}
