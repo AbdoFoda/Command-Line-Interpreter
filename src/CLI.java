@@ -10,6 +10,7 @@ public class CLI {
 		cmd.put("pwd", new Pwd());
 		cmd.put("ls", new Ls());
 		cmd.put("cd", new Cd());
+		cmd.put("cat", new Cat());
 	}
 
 	public static ArrayList<String> parser(String input) {
