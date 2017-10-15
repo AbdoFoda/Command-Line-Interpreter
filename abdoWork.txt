@@ -1,6 +1,6 @@
 Abdo's Command Lines:
-date
-clear
+date (done)
+clear (done)
 rmdir
 mkdir
 cp
