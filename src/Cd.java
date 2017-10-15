@@ -6,8 +6,7 @@ public class Cd extends Cmd {
 		ArrayList<String> ret = new ArrayList<String>();
 		if (args.size() > 0 && !args.get(0).equals(".")) {
 			if (args.get(0).equals("..")) {
-				args.set(0,
-						args.get(0).substring(args.get(0).lastIndexOf("/") + 1));
+				args.set(0, args.get(0).substring(args.get(0).lastIndexOf("/") + 1));
 			} else {
 				Integer index = args.get(0).indexOf("/home");
 				if (index == -1) {
