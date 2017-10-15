@@ -1,0 +1,7 @@
+Abdo's Command Lines:
+date
+clear
+rmdir
+mkdir
+cp
+>> 
