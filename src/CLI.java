@@ -11,6 +11,7 @@ public class CLI {
 		cmd.put("ls", new Ls());
 		cmd.put("cd", new Cd());
 		cmd.put("cat", new Cat());
+		cmd.put("rm", new Rm());
 	}
 
 	public static ArrayList<String> parser(String input) {
