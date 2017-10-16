@@ -14,9 +14,12 @@ public class More extends Cmd {
 					System.out.println("more");
 					while (i + 1 != output.size() && flag == false) {
 						String input = new Scanner(System.in).nextLine();
-						if (input.equals("\n"))
+						if (!input.trim().equals("")) {
 							flag = true;
+							break;
+						}
 						System.out.println(output.get(i));
+						i++;
 					}
 				} else {
 					System.out.println(output.get(i));

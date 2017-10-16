@@ -36,17 +36,14 @@ public class Mv extends Cmd {
 			// System.out.println("hmmmm");
 			ret.add("process can not be continued");
 		} else {
-			for (int i = 0; i < args.size(); i++) {
+			args.set(args.size() - 1, checkDir(args.get(args.size() - 1)));
+			for (int i = 0; i + 1 < args.size(); i++) {
 				args.set(i, checkDir(args.get(i)));
 			}
-			if (args.get(args.size() - 1) == null)
+			if (checkDir(args.get(args.size() - 1)) == null)
 				new Mkdir().execute(new ArrayList<String>(Arrays.asList(args
 						.get(args.size() - 1))));
 			recurseOnDir(args.get(args.size() - 1), args);
-			for (int i = 0; i + 1 < args.size(); i++) {
-				new Rmdir().execute(new ArrayList<String>(Arrays.asList(args
-						.get(i))));
-			}
 		}
 		return ret;
 	}
@@ -70,11 +67,15 @@ public class Mv extends Cmd {
 	public void recurseOnDir(String f, ArrayList<String> args) {
 		for (int i = 0; i + 1 < args.size(); i++) {
 			String dir = args.get(i);
+			System.out.println(dir);
 			if (dir == null)
 				continue;
 			if (new File(dir).isFile()) {
 				try {
+					System.out.println(dir);
+					System.out.println(f);
 					Files.copy(new File(dir).toPath(), new File(f).toPath());
+					new Rm().execute(new ArrayList<String>(Arrays.asList(dir)));
 				} catch (Exception e) {
 				}
 				continue;
@@ -87,6 +88,7 @@ public class Mv extends Cmd {
 					f + "/" + dir,
 					new ArrayList<String>(new Ls()
 							.execute(new ArrayList<String>(Arrays.asList(dir)))));
+			new Rmdir().execute(new ArrayList<String>(Arrays.asList(dir)));
 		}
 	}
 
