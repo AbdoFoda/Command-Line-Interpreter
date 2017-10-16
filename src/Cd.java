@@ -8,7 +8,6 @@ public class Cd extends Cmd {
 			if (args.get(0).equals("..")) {
 				CLI.workingDirectory = CLI.workingDirectory.substring(0,
 						CLI.workingDirectory.lastIndexOf("/"));
-				System.out.println(CLI.workingDirectory);
 			} else {
 				Integer index = args.get(0).indexOf("/home");
 				if (index == -1) {

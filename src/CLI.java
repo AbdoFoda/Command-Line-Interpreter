@@ -11,6 +11,10 @@ public class CLI {
 		cmd.put("ls", new Ls());
 		cmd.put("cd", new Cd());
 		cmd.put("cat", new Cat());
+		cmd.put("clear", new Clear());
+		cmd.put("date", new Date());
+		cmd.put("mkdir", new Mkdir());
+
 		cmd.put("rm", new Rm());
 	}
 
