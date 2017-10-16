@@ -1,9 +1,18 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class CLI {
 
 	static HashMap<String, Cmd> cmd = new HashMap<String, Cmd>();
 	protected static String workingDirectory = new String();
+
+	public static String getAbsolutePath(String path) {
+		if (path.charAt(0) != '/') {
+			path = workingDirectory + "/" + path;
+		}
+		return path;
+	}
 
 	public static void init() {
 		workingDirectory = "/home";
@@ -14,10 +23,15 @@ public class CLI {
 		cmd.put("clear", new Clear());
 		cmd.put("date", new Date());
 		cmd.put("mkdir", new Mkdir());
-		cmd.put("mv", new Mv());
 		cmd.put("rm", new Rm());
+		cmd.put("cp", new Copy());
+		cmd.put("mv", new Mv());
 		cmd.put("more", new More());
 		cmd.put("help", new Help());
+		cmd.put("args", new args());
+		Help.init();
+		args.init();
+
 	}
 
 	public static ArrayList<String> parser(String input) {
@@ -29,20 +43,75 @@ public class CLI {
 												// executed
 			commandLine = Arrays
 					.copyOfRange(commandLine, 1, commandLine.length);
-			if (command == "?-") {
-				ArrayList<String> args = new ArrayList<String>(
-						new Help().execute(new ArrayList<String>(Arrays
-								.asList(commandLine))));
-				for (int i = 0; i < args.size; i++) {
-
-				}
+			if ("?-".equals(command)) {
+				ret.addAll(new Help().execute(new ArrayList<String>(Arrays
+						.asList(commandLine))));
 
 			} else if (cmd.containsKey(command)) {
-				ret.addAll(cmd.get(command).execute(
-						new ArrayList<String>(Arrays.asList(commandLine))));
+				String filename = "", overWrite = "";
+				for (int j = 0; j < commandLine.length; ++j) {
+					if (commandLine[j].equals(">>")
+							|| commandLine[j].equals(">")) {
+						if (j != commandLine.length - 2) {
+							ret.add("an error has occured with overloading operator,it could have just a file");
+							return ret;
+						} else {
+							if (commandLine[j].equals(">>")) {
+								filename = getAbsolutePath(commandLine[j + 1]);
+
+							} else {
+								overWrite = commandLine[j + 1];
+								if (overWrite.charAt(0) != '/') {
+									overWrite = workingDirectory + "/"
+											+ overWrite;
+								}
+							}
+							commandLine = Arrays.copyOfRange(commandLine, 0, j);
+							break;
+						}
+					}
+				}
+				if (filename.length() > 0) {
+					File f = new File(filename);
+					if (f.exists()) {
+						try {
+							FileOperations.writeToTextFile(
+									filename,
+									cmd.get(command).execute(
+											new ArrayList<String>(Arrays
+													.asList(commandLine))));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else {
+						ret.add("No such file or directory");
+					}
+				} else if (overWrite.length() > 0) {
+					File f = new File(overWrite);
+					if (f.exists()) {
+						try {
+							FileOperations.overWriteToTextFile(
+									overWrite,
+									cmd.get(command).execute(
+											new ArrayList<String>(Arrays
+													.asList(commandLine))));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else {
+						ret.add("No such file or directory");
+					}
+				} else {
+					ret.addAll(cmd.get(command).execute(
+							new ArrayList<String>(Arrays.asList(commandLine))));
+				}
+
 			} else {
 				ret.add("InValid Command");
 			}
+
 		}
 		return ret;
 	}

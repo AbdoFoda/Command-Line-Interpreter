@@ -2,6 +2,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import static java.nio.file.StandardCopyOption.*;
 
 public class Mv extends Cmd {
 	public ArrayList<String> execute(ArrayList<String> args) {
@@ -25,9 +26,9 @@ public class Mv extends Cmd {
 					f1.createNewFile();
 				} catch (Exception e) {
 				}
-
+				FileToFile(args);
 			}
-			FileToFile(args);
+
 		} else if (args.size() == 2 && check0 != null && check1 != null
 				&& new File(args.get(0)).isFile()
 				&& new File(args.get(1)).isFile()) {
@@ -67,27 +68,28 @@ public class Mv extends Cmd {
 	public void recurseOnDir(String f, ArrayList<String> args) {
 		for (int i = 0; i + 1 < args.size(); i++) {
 			String dir = args.get(i);
-			System.out.println(dir);
 			if (dir == null)
 				continue;
 			if (new File(dir).isFile()) {
 				try {
-					System.out.println(dir);
-					System.out.println(f);
-					Files.copy(new File(dir).toPath(), new File(f).toPath());
+					String dest = f + "/" + (new File(dir).getName());
+					Files.copy(new File(dir).toPath(), new File(dest).toPath(), REPLACE_EXISTING);
 					new Rm().execute(new ArrayList<String>(Arrays.asList(dir)));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				continue;
 			}
-			String direct = f + dir.substring(dir.lastIndexOf("/"));
+			String direct = f + "/" + new File(dir).getName();
 			new Mkdir().execute(new ArrayList<String>(Arrays.asList(direct)));
-			recurseOnDir(
-					f + "/" + dir,
-					new ArrayList<String>(new Ls()
-							.execute(new ArrayList<String>(Arrays.asList(dir)))));
-			///new Rmdir().execute(new ArrayList<String>(Arrays.asList(dir)));
+			ArrayList<String> newArgs = new ArrayList<String>(new Ls()
+										.execute(new ArrayList<String>(Arrays.asList(dir))));
+			for (String arg : args) {
+				arg = direct + "/" + arg;
+			}
+			newArgs.add(args.get(args.size() - 1));
+			recurseOnDir(direct, newArgs);
+			// /new Rmdir().execute(new ArrayList<String>(Arrays.asList(dir)));
 		}
 	}
 

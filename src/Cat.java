@@ -6,10 +6,15 @@ public class Cat extends Cmd {
 	public ArrayList<String> execute(ArrayList<String> args) {
 		ArrayList<String> ret = new ArrayList<String>();
 		for (String e : args) {
-			File f = new File(e);
-			if (!f.isDirectory())
-				e = CLI.workingDirectory + '/' + e;
-			ret.addAll(readFile(new File(e)));
+			if (e.charAt(0) == '\"' && e.charAt(e.length() - 1) == '\"') {
+				ret.add(e.substring(1, e.length() - 1));
+			} else {
+				File f = new File(e);
+				if (!f.isDirectory())
+					e = CLI.workingDirectory + '/' + e;
+				// System.out.println(e);
+				ret.addAll(readFile(new File(e)));
+			}
 		}
 		return ret;
 	}
