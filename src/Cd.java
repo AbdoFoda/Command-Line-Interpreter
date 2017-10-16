@@ -6,8 +6,11 @@ public class Cd extends Cmd {
 		ArrayList<String> ret = new ArrayList<String>();
 		if (args.size() > 0 && !args.get(0).equals(".")) {
 			if (args.get(0).equals("..")) {
-				CLI.workingDirectory = CLI.workingDirectory.substring(0,
-						CLI.workingDirectory.lastIndexOf("/"));
+				if (CLI.workingDirectory == "/home") {
+					ret.add("You can't go back more");
+				} else {
+					CLI.workingDirectory = CLI.workingDirectory.substring(0, CLI.workingDirectory.lastIndexOf("/"));
+				}
 			} else {
 				Integer index = args.get(0).indexOf("/home");
 				if (index == -1) {
