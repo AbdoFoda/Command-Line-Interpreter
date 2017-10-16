@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Mv extends Cmd {
 	public ArrayList<String> execute(ArrayList<String> args) {
 		ArrayList<String> ret = new ArrayList<String>();
-		File f = new File(args.get(i));
+		File f = new File(args.get(args.size() - 1));
 		if (f.isFile()) {
 			if (args.size() == 2) {
 				FileToFile(args);
