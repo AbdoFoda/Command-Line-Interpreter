@@ -17,6 +17,7 @@ public class CLI {
 		cmd.put("mv", new Mv());
 		cmd.put("rm", new Rm());
 		cmd.put("more", new More());
+		cmd.put("help", new Help());
 	}
 
 	public static ArrayList<String> parser(String input) {
@@ -28,7 +29,15 @@ public class CLI {
 												// executed
 			commandLine = Arrays
 					.copyOfRange(commandLine, 1, commandLine.length);
-			if (cmd.containsKey(command)) {
+			if (command == "?-") {
+				ArrayList<String> args = new ArrayList<String>(
+						new Help().execute(new ArrayList<String>(Arrays
+								.asList(commandLine))));
+				for (int i = 0; i < args.size; i++) {
+
+				}
+
+			} else if (cmd.containsKey(command)) {
 				ret.addAll(cmd.get(command).execute(
 						new ArrayList<String>(Arrays.asList(commandLine))));
 			} else {

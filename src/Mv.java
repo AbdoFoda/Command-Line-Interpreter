@@ -77,18 +77,17 @@ public class Mv extends Cmd {
 					Files.copy(new File(dir).toPath(), new File(f).toPath());
 					new Rm().execute(new ArrayList<String>(Arrays.asList(dir)));
 				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				continue;
 			}
-			String tmpWorkingDir = CLI.workingDirectory;
-			CLI.workingDirectory = f;
-			CLI.workingDirectory = tmpWorkingDir;
-			new Mkdir().execute(new ArrayList<String>(Arrays.asList(dir)));
+			String direct = f + dir.substring(dir.lastIndexOf("/"));
+			new Mkdir().execute(new ArrayList<String>(Arrays.asList(direct)));
 			recurseOnDir(
 					f + "/" + dir,
 					new ArrayList<String>(new Ls()
 							.execute(new ArrayList<String>(Arrays.asList(dir)))));
-			new Rmdir().execute(new ArrayList<String>(Arrays.asList(dir)));
+			///new Rmdir().execute(new ArrayList<String>(Arrays.asList(dir)));
 		}
 	}
 

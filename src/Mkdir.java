@@ -15,6 +15,7 @@ public class Mkdir extends Cmd {
 				if(dir.charAt(0)!='/') {
 					dir=CLI.workingDirectory+"/"+dir;
 				}
+				System.out.println(dir);
 				if(Files.exists(Paths.get(dir.substring(0,dir.lastIndexOf("/")))) ){
 					Path path= Paths.get(dir);
 					if(!Files.exists(path)) {
