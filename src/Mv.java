@@ -6,10 +6,20 @@ import java.util.Arrays;
 public class Mv extends Cmd {
 	public ArrayList<String> execute(ArrayList<String> args) {
 		ArrayList<String> ret = new ArrayList<String>();
-		boolean check0 = checkDir(args.get(0)), check1 = checkDir(args.get(1));
-		if (args.size() == 2 && check0 == true
+		if (args.size() == 1) {
+			ret.add("process can not be continued");
+			return ret;
+		}
+		String check0 = checkDir(args.get(0)), check1 = checkDir(args.get(1));
+		args.set(0, check0);
+		if (check1 != null)
+			args.set(1, check1);
+		if (args.size() == 2 && check0 != null
 				&& new File(args.get(0)).isFile()) {
-			if (check1 == false) {
+			if (check1 == null) {
+				if (args.get(1).indexOf("/home") == -1) {
+					args.set(1, CLI.workingDirectory + '/' + args.get(1));
+				}
 				File f1 = new File(args.get(1));
 				try {
 					f1.createNewFile();
@@ -18,15 +28,16 @@ public class Mv extends Cmd {
 
 			}
 			FileToFile(args);
-		} else if (args.size() == 2 && check0 == true && check1 == true
+		} else if (args.size() == 2 && check0 != null && check1 != null
 				&& new File(args.get(0)).isFile()
 				&& new File(args.get(1)).isFile()) {
 			FileToFile(args);
-		} else if (args.size() == 2 && check0 == false) {
+		} else if (args.size() == 2 && check0 == null) {
+			// System.out.println("hmmmm");
 			ret.add("process can not be continued");
 		} else {
 			for (int i = 0; i < args.size(); i++) {
-				if (checkDir(args.get(i)) == false)
+				if (checkDir(args.get(i)) == null)
 					args.set(i, null);
 			}
 			if (args.get(args.size() - 1) == null)
@@ -37,16 +48,20 @@ public class Mv extends Cmd {
 		return ret;
 	}
 
-	public Boolean checkDir(String args) {
+	public String checkDir(String args) {
 		File f = new File(args);
-		if (!f.exists()) {
-			args = CLI.workingDirectory + '/' + args;
-			f = new File(args);
+		try {
 			if (!f.exists()) {
-				return false;
+				args = CLI.workingDirectory + '/' + args;
+				f = new File(args);
+				if (!f.exists()) {
+					return null;
+				}
 			}
+		} catch (Exception e) {
+			return null;
 		}
-		return true;
+		return args;
 	}
 
 	public void recurseOnDir(String f, ArrayList<String> args) {
@@ -82,31 +97,7 @@ public class Mv extends Cmd {
 	}
 
 	public ArrayList<String> FileToFile(ArrayList<String> args) {
-		File f = new File(args.get(0)), f1 = new File(args.get(1));
-		System.out.println("reem d5lt1");
-		if (!f.exists()) {
-			args.set(0, CLI.workingDirectory + '/' + args.get(0));
-		}
-		if (!f1.exists()) {
-			if (args.get(1).indexOf("/home") == -1)
-				args.set(1, CLI.workingDirectory + '/' + args.get(1));
-			System.out.println("reem d5lt2");
-			f1 = new File(args.get(1));
-			if (!f1.exists()) {
-				try {
-					f1.createNewFile();
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
-
-			}
-		}
 		ArrayList<String> ret = new ArrayList<String>();
-		String checker = checkFile(args);
-		if (!" ".equals(checker)) {
-			ret.add(checker);
-			return ret;
-		}
 		File oldfile = new File(args.get(0));
 		File newfile = new File(args.get(1));
 		oldfile.renameTo(newfile);
