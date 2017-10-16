@@ -14,8 +14,9 @@ public class CLI {
 		cmd.put("clear", new Clear());
 		cmd.put("date", new Date());
 		cmd.put("mkdir", new Mkdir());
-
+		cmd.put("mv", new Mv());
 		cmd.put("rm", new Rm());
+		cmd.put("more", new More());
 	}
 
 	public static ArrayList<String> parser(String input) {
