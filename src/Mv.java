@@ -37,13 +37,16 @@ public class Mv extends Cmd {
 			ret.add("process can not be continued");
 		} else {
 			for (int i = 0; i < args.size(); i++) {
-				if (checkDir(args.get(i)) == null)
-					args.set(i, null);
+				args.set(i, checkDir(args.get(i)));
 			}
 			if (args.get(args.size() - 1) == null)
 				new Mkdir().execute(new ArrayList<String>(Arrays.asList(args
 						.get(args.size() - 1))));
 			recurseOnDir(args.get(args.size() - 1), args);
+			for (int i = 0; i + 1 < args.size(); i++) {
+				new Rmdir().execute(new ArrayList<String>(Arrays.asList(args
+						.get(i))));
+			}
 		}
 		return ret;
 	}
@@ -70,7 +73,10 @@ public class Mv extends Cmd {
 			if (dir == null)
 				continue;
 			if (new File(dir).isFile()) {
-				File file = new File(dir);
+				try {
+					Files.copy(new File(dir).toPath(), new File(f).toPath());
+				} catch (Exception e) {
+				}
 				continue;
 			}
 			String tmpWorkingDir = CLI.workingDirectory;
@@ -81,7 +87,6 @@ public class Mv extends Cmd {
 					f + "/" + dir,
 					new ArrayList<String>(new Ls()
 							.execute(new ArrayList<String>(Arrays.asList(dir)))));
-
 		}
 	}
 

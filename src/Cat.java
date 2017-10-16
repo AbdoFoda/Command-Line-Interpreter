@@ -9,7 +9,6 @@ public class Cat extends Cmd {
 			File f = new File(e);
 			if (!f.isDirectory())
 				e = CLI.workingDirectory + '/' + e;
-//			System.out.println(e);
 			ret.addAll(readFile(new File(e)));
 		}
 		return ret;
