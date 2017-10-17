@@ -8,12 +8,13 @@ public class More extends Cmd {
 		for (String dir : args) {
 			ArrayList<String> output = new ArrayList<String>(
 					new Cat().execute(new ArrayList<String>(Arrays.asList(dir))));
-			boolean flag = false;
+			boolean flag = false ;
+			Scanner sc = new Scanner(System.in);
 			for (int i = 0; i < output.size() && flag == false; i++) {
 				if (i * 2 >= output.size() && flag == false || i > 10) {
 					System.out.println("more");
 					while (i + 1 != output.size() && flag == false) {
-						String input = new Scanner(System.in).nextLine();
+						String input = sc.nextLine();
 						if (!input.trim().equals("")) {
 							flag = true;
 							break;
@@ -25,6 +26,7 @@ public class More extends Cmd {
 					System.out.println(output.get(i));
 				}
 			}
+			sc.close();
 		}
 		return ret;
 	}

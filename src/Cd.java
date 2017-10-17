@@ -6,12 +6,17 @@ public class Cd extends Cmd {
 		ArrayList<String> ret = new ArrayList<String>();
 		if (args.size() > 0 && !args.get(0).equals(".")) {
 			if (args.get(0).equals("..")) {
-				if (CLI.workingDirectory.equals("/home")) {
-					ret.add("You can't go back more");
-				} else {
+				try {
+
 					CLI.workingDirectory = CLI.workingDirectory.substring(0,
 							CLI.workingDirectory.lastIndexOf("/"));
+					if(CLI.workingDirectory.length()==0){
+						CLI.workingDirectory="/";
+					}
+				} catch (Exception e) {
+					ret.add("No such file or directory");
 				}
+
 			} else {
 				Integer index = args.get(0).indexOf("/home");
 				if (index == -1) {
@@ -22,7 +27,7 @@ public class Cd extends Cmd {
 					CLI.workingDirectory = args.get(0);
 
 				} else {
-					ret.add(0, "No such file or directory");
+					ret.add("No such file or directory");
 				}
 			}
 		}

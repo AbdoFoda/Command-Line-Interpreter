@@ -34,7 +34,6 @@ public class Mv extends Cmd {
 				&& new File(args.get(1)).isFile()) {
 			FileToFile(args);
 		} else if (args.size() == 2 && check0 == null) {
-			// System.out.println("hmmmm");
 			ret.add("process can not be continued");
 		} else {
 			args.set(args.size() - 1, checkDir(args.get(args.size() - 1)));
@@ -44,7 +43,7 @@ public class Mv extends Cmd {
 			if (checkDir(args.get(args.size() - 1)) == null)
 				new Mkdir().execute(new ArrayList<String>(Arrays.asList(args
 						.get(args.size() - 1))));
-			recurseOnDir(args.get(args.size() - 1), args);
+			RecurseOnDir(args, args.get(args.size() - 1));
 		}
 		return ret;
 	}
@@ -65,31 +64,32 @@ public class Mv extends Cmd {
 		return args;
 	}
 
-	public void recurseOnDir(String f, ArrayList<String> args) {
+	public void RecurseOnDir(ArrayList<String> args, String destination) {
 		for (int i = 0; i + 1 < args.size(); i++) {
 			String dir = args.get(i);
 			if (dir == null)
 				continue;
 			if (new File(dir).isFile()) {
 				try {
-					String dest = f + "/" + (new File(dir).getName());
-					Files.copy(new File(dir).toPath(), new File(dest).toPath(), REPLACE_EXISTING);
+					String dest = destination + "/" + (new File(dir).getName());
+					Files.copy(new File(dir).toPath(), new File(dest).toPath(),
+							REPLACE_EXISTING);
 					new Rm().execute(new ArrayList<String>(Arrays.asList(dir)));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				continue;
 			}
-			String direct = f + "/" + new File(dir).getName();
+			String direct = destination + "/" + new File(dir).getName();
 			new Mkdir().execute(new ArrayList<String>(Arrays.asList(direct)));
-			ArrayList<String> newArgs = new ArrayList<String>(new Ls()
-										.execute(new ArrayList<String>(Arrays.asList(dir))));
-			for (String arg : args) {
-				arg = direct + "/" + arg;
+			ArrayList<String> newArgs = new ArrayList<String>(
+					new Ls().execute(new ArrayList<String>(Arrays.asList(dir))));
+			for (int j = 0; j < newArgs.size(); j++) {
+				newArgs.set(j, dir + "/" + newArgs.get(j));
 			}
-			newArgs.add(args.get(args.size() - 1));
-			recurseOnDir(direct, newArgs);
-			// /new Rmdir().execute(new ArrayList<String>(Arrays.asList(dir)));
+			newArgs.add("j");
+			RecurseOnDir(newArgs, direct);
+			new Rmdir().execute(new ArrayList<String>(Arrays.asList(dir)));
 		}
 	}
 

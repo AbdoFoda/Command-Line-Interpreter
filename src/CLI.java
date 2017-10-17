@@ -23,6 +23,7 @@ public class CLI {
 		cmd.put("clear", new Clear());
 		cmd.put("date", new Date());
 		cmd.put("mkdir", new Mkdir());
+		cmd.put("rmdir", new Rmdir());
 		cmd.put("rm", new Rm());
 		cmd.put("cp", new Copy());
 		cmd.put("mv", new Mv());

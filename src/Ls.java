@@ -10,7 +10,7 @@ public class Ls extends Cmd {
 				args.set(0, CLI.workingDirectory + '/' + args.get(0));
 			}
 		} else {
-			args.add(0, CLI.workingDirectory);
+			args.add(CLI.workingDirectory);
 		}
 		File f = new File(args.get(0));
 		if (f.isDirectory()) {
@@ -22,7 +22,7 @@ public class Ls extends Cmd {
 				}
 			}
 		} else {
-			ret.add(0, "No such file or directory");
+			ret.add("No such file or directory");
 		}
 		return ret;
 	}
